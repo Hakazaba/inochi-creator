@@ -20,6 +20,7 @@ import std.string;
 import std.format;
 import std.conv;
 import i18n;
+import core.stdcpp.typeinfo;
 
 enum SelectState {
     Init, Started, Ended
@@ -165,6 +166,16 @@ protected:
                 incText(incTypeIdToIcon("MeshGroup"));
                 igSameLine(0, 2);
                 if (igMenuItem(__("MeshGroup"), "", false, true)) incAddChildWithHistory(new MeshGroup(cast(Node)null), n);
+                
+                incText(incTypeIdToIcon("Part"));
+                igSameLine(0, 2);
+                
+                if (igMenuItem(__("Duplicate"), "", false, true)) {
+                    
+                    
+                    recursiveDuplicate(n, n.parent);
+                    incActivePuppet().rescanNodes();
+                }
 
                 igEndMenu();
             }

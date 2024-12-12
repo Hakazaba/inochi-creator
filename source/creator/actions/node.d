@@ -332,6 +332,73 @@ void incAddChildWithHistory(Node n, Node to, string name=null) {
     incActivePuppet().rescanNodes();
 }
 
+void recursiveDuplicate(Node n, Node to){
+    Node x;
+
+    if ((cast(Part) n) is null) {
+        
+    if ((cast(Composite) n) is null) {
+    
+    if ((cast(MeshGroup) n) is null) {
+        
+    if ((cast(SimplePhysics) n) is null) {
+        
+    if ((cast(Camera) n) is null) {
+        x = new Node(to);
+        
+    }//Lets not duplicate cameras for now
+    else return;
+    }else {
+        SimplePhysics c = cast(SimplePhysics) n;
+        SimplePhysics p = new SimplePhysics(to);
+        p.param(c.param());
+        p.modelType_ = c.modelType_;
+        p.mapMode = c.mapMode;
+        p.localOnly = c.localOnly;
+        p.gravity = c.gravity;
+        p.length = c.length;
+        p.frequency = c.frequency;
+        p.angleDamping = c.angleDamping;
+        p.lengthDamping = c.lengthDamping;
+        p.outputScale = c.outputScale;
+        p.output = c.output;
+    }
+    }
+    }else{
+        //Composite c = cast(Composite) n;
+        Composite p = new Composite(to);
+        x=p;
+
+    }
+    }else{
+        Part c = cast(Part) n;
+        Part p = new Part(c.getMesh(),c.textures,to); 
+        p.textureIds = c.textureIds;
+        p.tint = c.tint;
+        p.screenTint = c.screenTint;
+        p.emissionStrength = c.emissionStrength;
+        p.blendingMode = c.blendingMode;
+        p.opacity = c.opacity;
+        p.maskAlphaThreshold = c.maskAlphaThreshold;
+        p.masks = dup(c.masks);
+        x = p;
+    }
+    x.name = n.name;
+    x.enabled = n.enabled;
+    x.globalTransform = n.globalTransform;
+    x.localTransform = n.localTransform;
+    x.zSort = n.zSort;
+
+ 
+    foreach (child; n.children())
+    {
+        recursiveDuplicate(child,x);
+    }
+    // not an object of `ChildClass`
+
+    
+}
+
 GroupAction incDeleteMaskOfNode(Node n, GroupAction group = null) {
     auto removedDrawables = incActivePuppet().findNodesType!Drawable(n);
     auto parts = incActivePuppet().findNodesType!Part(incActivePuppet().root);
