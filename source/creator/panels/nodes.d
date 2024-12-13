@@ -21,7 +21,6 @@ import std.format;
 import std.conv;
 import i18n;
 
-
 enum SelectState {
     Init, Started, Ended
 }
