@@ -20,7 +20,7 @@ import std.string;
 import std.format;
 import std.conv;
 import i18n;
-import core.stdcpp.typeinfo;
+
 
 enum SelectState {
     Init, Started, Ended
