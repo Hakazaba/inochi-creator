@@ -164,17 +164,16 @@ protected:
                 igSameLine(0, 2);
                 if (igMenuItem(__("Camera"), "", false, true)) incAddChildWithHistory(new ExCamera(cast(Node)null), n);
 
+
                 incText(incTypeIdToIcon("MeshGroup"));
                 igSameLine(0, 2);
                 if (igMenuItem(__("MeshGroup"), "", false, true)) incAddChildWithHistory(new MeshGroup(cast(Node)null), n);
-                
-                if((cast(Camera)n is null) & (cast(Puppet)n is null)){
+
+
+                if(!cast(Camera)n & !cast(Puppet)n){
                     incText(incTypeIdToIcon("Part"));
-                    igSameLine(0, 2);
-                    
-                    if (igMenuItem(__("Duplicate"), "", false, true)) {
-                        
-                        
+                    igSameLine(0, 2); 
+                    if (igMenuItem(__("Duplicate"), "", false, true)) {                   
                         Node x = recursiveDuplicate(n);
                         if (x !is null){
                             x.parent = n.parent;

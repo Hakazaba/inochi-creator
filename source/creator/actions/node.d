@@ -334,21 +334,27 @@ void incAddChildWithHistory(Node n, Node to, string name=null) {
 
 Node recursiveDuplicate(Node n){
     Node x;
-
-    if ((cast(Part) n) is null) {
-        
-    if ((cast(Composite) n) is null) {
-    
-    if ((cast(MeshGroup) n) is null) {
-        
-    if ((cast(SimplePhysics) n) is null) {
-        
-    if ((cast(Camera) n) is null) {
-        x = new Node(inCreateUUID(),null);
-        
-    }//Lets not duplicate cameras for now
-    else return null;
-    }else {
+    if (cast(Part) n) {
+        Part c = cast(Part) n;
+        Part p = new Part(c.getMesh(),c.textures); 
+        p.textureIds = c.textureIds;
+        p.tint = c.tint;
+        p.screenTint = c.screenTint;
+        p.emissionStrength = c.emissionStrength;
+        p.blendingMode = c.blendingMode;
+        p.opacity = c.opacity;
+        p.maskAlphaThreshold = c.maskAlphaThreshold;
+        p.masks = c.masks;
+        x = p;
+    } else if (cast(Composite) n) {
+        //Do Composites hold any unique data?
+        Composite p = new Composite(null);
+        x=p;    
+    } else if (cast(MeshGroup) n) {
+        //Do meshgroups hold into any unique data?
+        MeshGroup p = new MeshGroup(null);
+        x=p;
+    } else if (cast(SimplePhysics) n) {
         SimplePhysics c = cast(SimplePhysics) n;
         SimplePhysics p = new SimplePhysics(null);
         p.param(c.param());
@@ -362,44 +368,20 @@ Node recursiveDuplicate(Node n){
         p.lengthDamping = c.lengthDamping;
         p.outputScale = c.outputScale;
         p.output = c.output;
-    }
-    }else{
-        MeshGroup p = new MeshGroup(null);
-        x=p;
-    }
-    }else{
-        //Composite c = cast(Composite) n;
-        Composite p = new Composite(null);
-        x=p;
-
-    }
-    }else{
-        Part c = cast(Part) n;
-        Part p = new Part(c.getMesh(),c.textures); 
-        p.textureIds = c.textureIds;
-        p.tint = c.tint;
-        p.screenTint = c.screenTint;
-        p.emissionStrength = c.emissionStrength;
-        p.blendingMode = c.blendingMode;
-        p.opacity = c.opacity;
-        p.maskAlphaThreshold = c.maskAlphaThreshold;
-        p.masks = c.masks;
-        x = p;
-    }
+    } else if (cast(Camera) n) {
+        //Lets not duplicate cameras for now
+        return null; 
+    } else x = new Node(inCreateUUID(),null);    
+    //Applies to all node types
     x.name = n.name;
     x.enabled = n.enabled;
     x.globalTransform = n.globalTransform;
     x.localTransform = n.localTransform;
     x.zSort = n.zSort;
-
- 
-    foreach (child; n.children())
-    {
+    foreach (child; n.children()) {
         x.addChild(recursiveDuplicate(child));
     }
-    // Returns the new node
-    return x;
-    
+    return x; 
 }
 
 GroupAction incDeleteMaskOfNode(Node n, GroupAction group = null) {
