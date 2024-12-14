@@ -332,7 +332,7 @@ void incAddChildWithHistory(Node n, Node to, string name=null) {
     incActivePuppet().rescanNodes();
 }
 
-void recursiveDuplicate(Node n, Node to){
+Node recursiveDuplicate(Node n){
     Node x;
 
     if ((cast(Part) n) is null) {
@@ -344,13 +344,13 @@ void recursiveDuplicate(Node n, Node to){
     if ((cast(SimplePhysics) n) is null) {
         
     if ((cast(Camera) n) is null) {
-        x = new Node(to);
+        x = new Node(inCreateUUID(),null);
         
     }//Lets not duplicate cameras for now
-    else return;
+    else return null;
     }else {
         SimplePhysics c = cast(SimplePhysics) n;
-        SimplePhysics p = new SimplePhysics(to);
+        SimplePhysics p = new SimplePhysics(null);
         p.param(c.param());
         p.modelType_ = c.modelType_;
         p.mapMode = c.mapMode;
@@ -363,16 +363,19 @@ void recursiveDuplicate(Node n, Node to){
         p.outputScale = c.outputScale;
         p.output = c.output;
     }
+    }else{
+        MeshGroup p = new MeshGroup(null);
+        x=p;
     }
     }else{
         //Composite c = cast(Composite) n;
-        Composite p = new Composite(to);
+        Composite p = new Composite(null);
         x=p;
 
     }
     }else{
         Part c = cast(Part) n;
-        Part p = new Part(c.getMesh(),c.textures,to); 
+        Part p = new Part(c.getMesh(),c.textures); 
         p.textureIds = c.textureIds;
         p.tint = c.tint;
         p.screenTint = c.screenTint;
@@ -380,7 +383,7 @@ void recursiveDuplicate(Node n, Node to){
         p.blendingMode = c.blendingMode;
         p.opacity = c.opacity;
         p.maskAlphaThreshold = c.maskAlphaThreshold;
-        p.masks = dup(c.masks);
+        p.masks = c.masks;
         x = p;
     }
     x.name = n.name;
@@ -392,10 +395,10 @@ void recursiveDuplicate(Node n, Node to){
  
     foreach (child; n.children())
     {
-        recursiveDuplicate(child,x);
+        x.addChild(recursiveDuplicate(child));
     }
-    // not an object of `ChildClass`
-
+    // Returns the new node
+    return x;
     
 }
 
