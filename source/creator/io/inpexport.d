@@ -334,7 +334,7 @@ void incINPExportFinalizePacking(ref Puppet source, Atlas[] atlasses) {
         foreach(Atlas atlas; atlasses) {
             
             // Look for our part in the atlas
-            if (part.uuid in atlas.mappings) {
+            if (part.textures[0].getRuntimeUUID() in atlas.mappings) {
 
                 // This will remap the UV coordinates of the part
                 // To 0..1 range if need be.
@@ -352,7 +352,7 @@ void incINPExportFinalizePacking(ref Puppet source, Atlas[] atlasses) {
 
                 // Now we need to scale those UV coordinates to fit within the mapping
                 float atlasSize = cast(float)atlas.textures[0].width;
-                rect mapping = atlas.mappings[part.uuid];
+                rect mapping = atlas.mappings[part.textures[0].getRuntimeUUID()];
                 foreach(ref uv; uvs) {
                     uv.x = (mapping.x+(uv.x*mapping.width))/atlasSize;
                     uv.y = (mapping.y+(uv.y*mapping.height))/atlasSize;

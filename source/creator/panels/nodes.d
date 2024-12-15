@@ -19,6 +19,8 @@ import inochi2d;
 import std.string;
 import std.format;
 import std.conv;
+import std.array;
+import std.algorithm.searching;
 import i18n;
 
 enum SelectState {
@@ -162,10 +164,27 @@ protected:
                 igSameLine(0, 2);
                 if (igMenuItem(__("Camera"), "", false, true)) incAddChildWithHistory(new ExCamera(cast(Node)null), n);
 
+
                 incText(incTypeIdToIcon("MeshGroup"));
                 igSameLine(0, 2);
                 if (igMenuItem(__("MeshGroup"), "", false, true)) incAddChildWithHistory(new MeshGroup(cast(Node)null), n);
 
+
+                if(!cast(Camera)n & !cast(Puppet)n){
+                    incText(incTypeIdToIcon("Part"));
+                    igSameLine(0, 2); 
+                    if (igMenuItem(__("Duplicate"), "", false, true)) {                   
+                        Node x = recursiveDuplicate(n);
+                        if (x !is null){
+                            x.parent = n.parent;
+                            //reordering the nodes for user friendliness.
+                            Node[] l = n.parent.children;
+                            l.insertInPlace(l.countUntil!(c => c is n)+1,x);
+                            l=l[0..$-1];
+                        }
+                        incActivePuppet().rescanNodes();
+                    }
+                }
                 igEndMenu();
             }
 
