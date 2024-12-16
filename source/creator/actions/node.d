@@ -348,12 +348,19 @@ Node recursiveDuplicate(Node n){
         x = p;
     } else if (cast(Composite) n) {
         //Do Composites hold any unique data?
+        Composite c = cast(Composite)n;
         Composite p = new Composite(null);
-        x=p;    
+        p.tint = c.tint;
+        p.screenTint = c.screenTint;
+        p.blendingMode = c.blendingMode;
+        p.opacity = c.opacity;
+        p.threshold = c.threshold;
+        p.masks = c.masks;
+        x = p;    
     } else if (cast(MeshGroup) n) {
         //Do meshgroups hold into any unique data?
         MeshGroup p = new MeshGroup(null);
-        x=p;
+        x = p;
     } else if (cast(SimplePhysics) n) {
         SimplePhysics c = cast(SimplePhysics) n;
         SimplePhysics p = new SimplePhysics(null);
@@ -368,6 +375,7 @@ Node recursiveDuplicate(Node n){
         p.lengthDamping = c.lengthDamping;
         p.outputScale = c.outputScale;
         p.output = c.output;
+        x = p;
     } else if (cast(Camera) n) {
         //Lets not duplicate cameras for now
         return null; 
