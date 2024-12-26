@@ -175,8 +175,9 @@ protected:
                     igSameLine(0, 2); 
                     if (igMenuItem(__("Duplicate"), "", false, true)) {                   
                         Node x = recursiveDuplicate(n);
+                        Transform t = x.localTransform;
                         incAddChildWithHistory(x,n.parent,n.name~(" Copy"));
-                        incActivePuppet().rescanNodes();
+                        x.localTransform = t;
                     }
                 }
                 igEndMenu();
