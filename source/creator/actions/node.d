@@ -348,6 +348,7 @@ Node recursiveDuplicate(Node n){
         p.opacity = c.opacity;
         p.maskAlphaThreshold = c.maskAlphaThreshold;
         p.masks = c.masks;
+        p.rebuffer(c.getMesh());
         x = p;
     } else if (cast(Composite) n) {
         //Do Composites hold any unique data?
@@ -362,7 +363,9 @@ Node recursiveDuplicate(Node n){
         x = p;    
     } else if (cast(MeshGroup) n) {
         //Do meshgroups hold into any unique data?
+        MeshGroup c = cast(MeshGroup) n;
         MeshGroup p = new MeshGroup(null);
+        p.rebuffer(c.getMesh());
         x = p;
     } else if (cast(SimplePhysics) n) {
         SimplePhysics c = cast(SimplePhysics) n;
